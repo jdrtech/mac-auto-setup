@@ -1,10 +1,7 @@
 #!/bin/bash
 cat << EOS
 
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
+ macOS automatic setup
 
 EOS
 
@@ -23,7 +20,7 @@ source ~/.zshrc
 #
 # Homebrew update and upgrade
 #
-brew upgrade --creanup
+brew upgrade --cleanup
 
 #
 # Homebrew Cask check and upgrade

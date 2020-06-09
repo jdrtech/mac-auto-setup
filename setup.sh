@@ -1,10 +1,7 @@
 #!/bin/bash
 cat << EOS
 
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
+ macOS automatic setup
 
 EOS
 
@@ -50,7 +47,6 @@ read -sp "Your Password: " pass;
 if ! command_exists mas ; then
   echo " ---- Mac App Store apps -----"
   brew install mas
-  mas install 497799835  # Xcode (8.2.1)
   echo " ------------ END ------------"
 fi
 
@@ -67,15 +63,6 @@ if ! command_exists zsh ; then
 fi
 
 #
-# Install vim
-#
-if ! command_exists vim ; then
-  echo " ------------ Vim ------------"
-  brew install vim --with-override-system-vi
-  echo " ------------ END ------------"
-fi
-
-#
 # Powerline
 #
 echo " --------- Powerline ---------"
@@ -86,111 +73,12 @@ git clone https://github.com/powerline/fonts.git ~/fonts
 echo " ------------ END ------------"
 
 #
-# Install ruby
-#
-if ! command_exists rbenv ; then
-  echo " ----------- Ruby ------------"
-  brew install rbenv
-  brew install ruby-build
-  rbenv --version
-  rbenv install -l
-  ruby_latest=$(rbenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
-  rbenv install $ruby_latest
-  rbenv global $ruby_latest
-  rbenv rehash
-  ruby -v
-  echo " ------------ END ------------"
-fi
-
-#
-# Install dotfiles system
-#
-echo " ---------- dotfiles ---------"
-sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
-cp $(cd $(dirname ${BASH_SOURCE:-$0}); pwd)/settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
-source ~/.zshrc
-echo " ------------ END ------------"
-
-#
-# Install Node.js env
-#
-if ! command_exists nodebrew ; then
-  echo " ---------- Node.js ----------"
-  curl -L git.io/nodebrew | perl - setup
-  nodebrew ls-remote
-  nodebrew install-binary latest
-  nodebrew ls
-  nodebrew use latest
-  node -v
-  npm -v
-  echo " ------------ END ------------"
-fi
-
-#
-# Install Yarn
-#
-if ! command_exists yarn ; then
-  echo " ----------- Yarn ------------"
-  brew install yarn
-  echo " ------------ END ------------"
-fi
-
-#
-# TeX settings
-#
-if ! command_exists tex ; then
-  echo " ------------ TeX ------------"
-  brew cask install mactex
-  # Tex Live Utility > preference > path -> /Library/TeX/texbin
-  version=$(tex -version | grep -oE '2[0-9]{3}' | head -1)
-  echo $pass | sudo -S /usr/local/texlive/$version/bin/x86_64-darwin/tlmgr path add
-  echo $pass | sudo -S tlmgr update --self --all
-  # JPN Lang settings
-  cd /usr/local/texlive/$version/texmf-dist/scripts/cjk-gs-integrate
-  echo $pass | sudo -S perl cjk-gs-integrate.pl --link-texmf --force
-  echo $pass | sudo -S mktexlsr
-  echo $pass | sudo -S kanji-config-updmap-sys hiragino-elcapitan-pron
-  # Select ==> TeXShop > Preferences > Source > pTeX (ptex2pdf)
-  echo " ------------ END ------------"
-fi
-
-#
 # Install wget
 #
 if ! command_exists wget ; then
   echo " ----------- wget ------------"
   brew install wget
   wget --version
-  echo " ------------ END ------------"
-fi
-
-#
-# CocoaPods
-#
-if ! command_exists pod ; then
-  echo " --------- CocoaPods ---------"
-  echo $pass | sudo -S gem install -n /usr/local/bin cocoapods --pre
-  pod setup
-  echo " ------------ END ------------"
-fi
-
-#
-# Carthage
-#
-if ! command_exists carthage ; then
-  echo " --------- Carthage ----------"
-  brew install carthage
-  echo " ------------ END ------------"
-fi
-
-#
-# swiftenv
-#
-if ! command_exists swiftenv ; then
-  echo " --------- swiftenv ----------"
-  brew install kylef/formulae/swiftenv
-  echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/.yadr/zsh/private.zsh
-  swiftenv rehash
   echo " ------------ END ------------"
 fi
 
@@ -226,14 +114,3 @@ while true; do
   esac
 done;
 
-read -p 'Please enter your GitHub Access Token. You can skip by typing "N".' Answer
-case $Answer in
-  '' | [Nn]* )
-    echo "Skip"
-    ;;
-  * )
-    echo "export GITHUB_ACCESS_TOKEN=${Answer}" >> ~/.yadr/zsh/private.zsh
-    echo "export HOMEBREW_GITHUB_API_TOKEN=${Answer}" >> ~/.yadr/zsh/private.zsh
-    echo "Writing to ~/.yadr/zsh/private.zsh is complete."
-    echo " ------------ END ------------"
-esac

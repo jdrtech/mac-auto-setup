@@ -1,10 +1,7 @@
 #!/bin/bash
 cat << EOS
 
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
+ macOS automatic setup
 
 EOS
 
@@ -38,5 +35,5 @@ fi
 # mac-auto-setup.git
 #
 echo " ---- mac-auto-setup.git -----"
-git clone https://github.com/AkkeyLab/mac-auto-setup.git
+git clone https://github.com/jdrtech/mac-auto-setup.git
 echo " ------------ END ------------"
